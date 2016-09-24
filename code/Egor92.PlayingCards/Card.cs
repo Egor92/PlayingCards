@@ -41,6 +41,11 @@ namespace Egor92.PlayingCards
 
         #region Overridden members
 
+        public override string ToString()
+        {
+            return $"Card: {Rank.ToSymbol()}{Suit.ToSymbol()}";
+        }
+
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -58,6 +63,20 @@ namespace Egor92.PlayingCards
             {
                 return ((int)Rank * 397) ^ (int)Suit;
             }
+        }
+
+        #endregion
+
+        #region Implementation of ICard
+
+        public string Key
+        {
+            get { return $"{Rank.ToString().ToUpper()}_OF_{Suit.ToString().ToUpper()}"; }
+        }
+
+        public string Code
+        {
+            get { return $"{Rank.ToSymbol()}{Suit.ToSymbol()}"; }
         }
 
         #endregion
