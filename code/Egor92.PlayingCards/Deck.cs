@@ -1,68 +1,84 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Egor92.PlayingCards
 {
-    using System.Linq;
+    using System.Collections;
 
-    public static class DeckFactory
+    public interface IDeck<TCard>
     {
-        private static readonly Rank[] Deck52Ranks = (Rank[])Enum.GetValues(typeof(Rank));
+        int Count { get; }
+        bool IsEmpty { get; }
+        TCard TakeCard();
+        void PutCard(TCard card);
+        void Shuffle();
+    }
 
-        private static readonly Rank[] Deck36Ranks = new Rank[]
-        {
-            Rank.Ace,
-            Rank.Six,
-            Rank.Seven,
-            Rank.Eight,
-            Rank.Nine,
-            Rank.Ten,
-            Rank.Jack,
-            Rank.Queen,
-            Rank.King,
-        };
+    public class Deck<TCard> : IDeck<TCard>, IEnumerable<TCard>
+        where TCard : ICard
+    {
+        #region Fields
 
-        public static List<Card> Create36Cards()
+        private Queue<TCard> _cards;
+
+        #endregion
+
+        #region Ctor
+
+        public Deck(IEnumerable<TCard> cards)
         {
-            return Enumerate36Cards().ToList();
+            _cards = new Queue<TCard>(cards);
         }
 
-        public static List<Card> Create52Cards()
+        #endregion
+
+        #region Implementation of IDeck<TCard>
+
+        public int Count
         {
-            return Enumerate52Cards().ToList();
+            get { return _cards.Count; }
         }
 
-        public static List<ICard> Create52CardsAndJokers()
+        public bool IsEmpty
         {
-            return Enumerable.Union<ICard>(Enumerate52Cards(), EnumerateJokers()).ToList();
+            get { return _cards.Count == 0; }
         }
 
-        private static IEnumerable<Card> Enumerate36Cards()
+        public TCard TakeCard()
         {
-            return EnumerateCards(Deck36Ranks);
+            return _cards.Dequeue();
         }
 
-        private static IEnumerable<Card> Enumerate52Cards()
+        public void PutCard(TCard card)
         {
-            return EnumerateCards(Deck52Ranks);
+            _cards.Enqueue(card);
         }
 
-        private static IEnumerable<Card> EnumerateCards(IList<Rank> ranks)
+        public void Shuffle()
         {
-            var suits = (Suit[])Enum.GetValues(typeof(Suit));
-            foreach (var suit in suits)
-            {
-                foreach (var rank in ranks)
-                {
-                    yield return new Card(rank, suit);
-                }
-            }
+            var seed = (int)(DateTime.Now.ToFileTime() % int.MaxValue);
+            var random = new Random(seed);
+            var shuffledCards = _cards.ToDictionary(item => random.NextDouble())
+                                      .OrderBy(x => x.Key)
+                                      .Select(x => x.Value);
+            _cards = new Queue<TCard>(shuffledCards);
         }
 
-        private static IEnumerable<Joker> EnumerateJokers()
+        #endregion
+
+        #region Implementation of IEnumerable<TCard>
+
+        public IEnumerator<TCard> GetEnumerator()
         {
-            yield return new Joker(CardColor.Black);
-            yield return new Joker(CardColor.Red);
+            return _cards.GetEnumerator();
         }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        #endregion
     }
 }
