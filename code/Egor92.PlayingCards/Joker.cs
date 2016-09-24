@@ -25,14 +25,10 @@
 
         #region Overridden members
 
-        #region Overrides of Object
-
         public override string ToString()
         {
-            return $"Card: {Color} Joker";
+            return $"Joker: {Color}";
         }
-
-        #endregion
 
         public override bool Equals(object obj)
         {
@@ -53,11 +49,6 @@
         #endregion
 
         #region Implementation of ICard
-
-        public string Key
-        {
-            get { return $"{Color.ToString().ToUpper()}_JOKER"; }
-        }
 
         public string Code
         {

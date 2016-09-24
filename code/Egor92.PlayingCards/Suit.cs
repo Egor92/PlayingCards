@@ -36,9 +36,9 @@
                 case Suit.Spades:
                     return '♠';
                 case Suit.Diamonds:
-                    return '♢';
+                    return '♦';
                 case Suit.Hearts:
-                    return '♡';
+                    return '♥';
                 default:
                     throw new Exception($"Unhandled case with {typeof(CardColor).FullName}");
             }
