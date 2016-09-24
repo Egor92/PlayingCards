@@ -6,7 +6,7 @@ namespace Egor92.PlayingCards
 {
     using System.Collections;
 
-    public interface IDeck<TCard>
+    public interface IDeck<TCard> : IEnumerable<TCard>
     {
         int Count { get; }
         bool IsEmpty { get; }
@@ -15,7 +15,7 @@ namespace Egor92.PlayingCards
         void Shuffle();
     }
 
-    public class Deck<TCard> : IDeck<TCard>, IEnumerable<TCard>
+    public class Deck<TCard> : IDeck<TCard>
         where TCard : ICard
     {
         #region Fields

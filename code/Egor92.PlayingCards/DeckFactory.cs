@@ -22,19 +22,22 @@ namespace Egor92.PlayingCards
             Rank.King,
         };
 
-        public static List<Card> Create36Cards()
+        public static Deck<Card> Create36Cards()
         {
-            return Enumerate36Cards().ToList();
+            var cards = Enumerate36Cards();
+            return new Deck<Card>(cards);
         }
 
-        public static List<Card> Create52Cards()
+        public static Deck<Card> Create52Cards()
         {
-            return Enumerate52Cards().ToList();
+            var cards = Enumerate52Cards();
+            return new Deck<Card>(cards);
         }
 
-        public static List<ICard> Create52CardsAndJokers()
+        public static Deck<ICard> Create52CardsAndJokers()
         {
-            return Enumerable.Union<ICard>(Enumerate52Cards(), EnumerateJokers()).ToList();
+            var cards = Enumerable.Union<ICard>(Enumerate52Cards(), EnumerateJokers());
+            return new Deck<ICard>(cards);
         }
 
         private static IEnumerable<Card> Enumerate36Cards()
