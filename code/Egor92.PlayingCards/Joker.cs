@@ -25,6 +25,11 @@
 
         #region Overridden members
 
+        public override string ToString()
+        {
+            return $"Joker: {Color}";
+        }
+
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -39,6 +44,15 @@
         public override int GetHashCode()
         {
             return (int)Color;
+        }
+
+        #endregion
+
+        #region Implementation of ICard
+
+        public string Code
+        {
+            get { return $"{Color.ToSymbol()}J"; }
         }
 
         #endregion

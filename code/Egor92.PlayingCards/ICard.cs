@@ -2,5 +2,6 @@
 {
     public interface ICard
     {
+        string Code { get; }
     }
 }
